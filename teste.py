@@ -1,5 +1,7 @@
 import pygame
 import random
+import time
+
 
 # Inicializa o Pygame
 pygame.init()
@@ -35,6 +37,7 @@ nivel = 1
 nivel_anterior = nivel
 dano = 15
 multiplicador_xp = 1.1
+temporizador_mensagem = None
 
 # Função para desenhar a barra de vida
 def draw_health_bar(x, y, health, max_health):
@@ -96,10 +99,8 @@ while running:
         print(xp)
         enemy_health = 100
 
-    if  xp >= xp_max:
-        font = pygame.font.SysFont(None, 55)
-        text = font.render("Você upou de nível", True, GREEN)
-        screen.blit(text, (WIDTH // 2 - 120, HEIGHT // 2 - 50))
+    if  xp >= xp_max and temporizador_mensagem is None:
+        temporizador_mensagem = pygame.time.get_ticks()
 
         nivel += 1
         print(nivel)
@@ -110,8 +111,14 @@ while running:
 
     if nivel_anterior < nivel:
         nivel_anterior = nivel
-        print(nivel_anterior)
         dano += 10
+    
+    if temporizador_mensagem is not None:
+        font = pygame.font.SysFont(None, 55)
+        text = font.render("Você upou de nível", True, GREEN)
+        screen.blit(text, (WIDTH // 2 - 120, HEIGHT // 2 - 50))
+        if pygame.time.get_ticks() - temporizador_mensagem > 1500:
+            temporizador_mensagem = None
 
     # Captura eventos
     for event in pygame.event.get():
