@@ -37,6 +37,15 @@ class Menu():
                 # "aumentar": {"imagem": self.botao_mais, "rect": pygame.Rect(x + 50, y, 30, 30)},
                 "diminuir": {"imagem": self.botao_menos, "rect": pygame.Rect(x, y, 30, 30)}
             }
+        
+        # Fazer os sprites funcionarem
+        self.sprites = []
+        for i in range(2):
+            frame = self.botoes["ataque"]["diminuir"]["imagem"].subsurface((i * 32, 0, 32, 32))
+            self.sprites.append(frame)
+
+        self.atual = 1
+        self.imagem = self.sprites[self.atual]
 
 menu = Menu(10, 5, 20, 8, 15)
 
