@@ -1,7 +1,4 @@
 import pygame
-import random
-import time
-
 
 # Inicializa o Pygame
 pygame.init()
@@ -32,12 +29,22 @@ max_health = 100
 
 # Sistema de xp
 xp = 0
+xp_limitador = 0
 xp_max = 100
 nivel = 1
 nivel_anterior = nivel
 dano = 15
 multiplicador_xp = 1.1
 temporizador_mensagem = None
+
+# Variáveis xp
+xp_width = 200
+xp_height = 20
+pos_xp_x = (WIDTH // 2) - (xp_width // 2)
+pos_xp_y = HEIGHT - (xp_height * 2)
+xp_ratio = 0
+temporizador_xp = None
+ganhando_xp = False
 
 # Função para desenhar a barra de vida
 def draw_health_bar(x, y, health, max_health):
@@ -55,6 +62,10 @@ def attack(dano):
     if enemy_health < 0:
         enemy_health = 0
 
+    
+    
+
+
 # Loop principal do jogo
 running = True
 clock = pygame.time.Clock()
@@ -71,15 +82,19 @@ while running:
     # Desenha a barra de vida do inimigo
     draw_health_bar(enemy.x, enemy.y - 30, enemy_health, max_health)
 
+    # Desenha a barra de xp
+    barra_xp = pygame.draw.rect(screen, WHITE, (pos_xp_x, pos_xp_y, xp_width, xp_height))
+    barra_xp_preenchida = pygame.draw.rect(screen, GREEN, (pos_xp_x, pos_xp_y, 0 + xp_ratio, xp_height))
+
     # Movimentação do jogador
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and player.x > 0:
+    if keys[pygame.K_a] and player.x > 0:
         player.x -= player_speed
-    if keys[pygame.K_RIGHT] and player.x < WIDTH - player_size:
+    if keys[pygame.K_d] and player.x < WIDTH - player_size:
         player.x += player_speed
-    if keys[pygame.K_UP] and player.y > 0:
+    if keys[pygame.K_w] and player.y > 0:
         player.y -= player_speed
-    if keys[pygame.K_DOWN] and player.y < HEIGHT - player_size:
+    if keys[pygame.K_s] and player.y < HEIGHT - player_size:
         player.y += player_speed
 
     # Inimigo se move automaticamente
@@ -94,9 +109,22 @@ while running:
         enemy.y += 1
 
     # Verifica se o inimigo morreu
-    while enemy_health == 0:
-        xp += 100
-        print(xp)
+    if enemy_health == 0 and not ganhando_xp:
+        temporizador_xp = pygame.time.get_ticks()
+        ganhando_xp = True
+        xp_limitador += 50
+
+    if ganhando_xp:
+        if xp <= xp_limitador and pygame.time.get_ticks() - temporizador_xp > 30: 
+            xp += 5
+            xp_ratio = (xp / xp_max) * 200
+            temporizador_xp = pygame.time.get_ticks()
+        elif xp > xp_limitador - 5:
+            ganhando_xp = False
+
+
+        # print(xp_ratio)
+        # print(xp)
         enemy_health = 100
 
     if  xp >= xp_max and temporizador_mensagem is None:
@@ -105,9 +133,15 @@ while running:
         nivel += 1
         print(nivel)
 
+        xp_excedente = xp_limitador - xp_max
         xp_max *= multiplicador_xp
-        xp = xp - xp_max
-        print(f"{xp_max:.2f}")
+        print(xp_max)
+        print(xp_excedente)
+        xp = 0
+        xp_limitador = xp_excedente
+        xp_ratio = (xp / xp_max) * 200
+        
+        # print(f"{xp_max:.2f}")
 
     if nivel_anterior < nivel:
         nivel_anterior = nivel
@@ -128,7 +162,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 attack(dano)
-                print(dano)
+                # print(dano)
 
     # Atualiza a tela
     pygame.display.flip()
