@@ -46,6 +46,9 @@ xp_ratio = 0
 temporizador_xp = None
 ganhando_xp = False
 
+# Distribuição de pontos
+pontos_disponiveis = 0
+
 # Função para desenhar a barra de vida
 def draw_health_bar(x, y, health, max_health):
     health_width = 200
@@ -61,9 +64,6 @@ def attack(dano):
     enemy_health -= damage
     if enemy_health < 0:
         enemy_health = 0
-
-    
-    
 
 
 # Loop principal do jogo
@@ -131,6 +131,8 @@ while running:
         temporizador_mensagem = pygame.time.get_ticks()
 
         nivel += 1
+        pontos_disponiveis += 5
+        pontos_disponiveis_copy = pontos_disponiveis
         print(nivel)
 
         xp_excedente = xp_limitador - xp_max
