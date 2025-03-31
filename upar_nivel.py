@@ -100,7 +100,7 @@ class Combate():
         if self.enemy_health == 0 and not self.ganhando_xp:
             self.temporizador_xp = pygame.time.get_ticks()
             self.ganhando_xp = True
-            self.xp_limitador += 50
+            self.xp_limitador += 100
 
         if self.ganhando_xp:
             if self.xp <= self.xp_limitador and pygame.time.get_ticks() - self.temporizador_xp > 30:

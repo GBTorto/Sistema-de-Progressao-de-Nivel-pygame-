@@ -58,23 +58,23 @@ class Menu():
             tela.blit(texto, botoes["texto_pos"])
 
 
-    def processar_eventos(self, event): 
-        print(combate.pontos_disponiveis)
-        if event.type == pygame.MOUSEBUTTONDOWN:  # Garante que só processamos cliques
-            for atributo, botoes in self.botoes.items():
-                # Verifica se clicou no botão de diminuir e se há pontos disponíveis para realocar
-                if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
-                    self.valores[atributo] -= 1
-                    botoes["diminuir"]["pressionado"] = True
-                    combate.pontos_disponiveis += 1  # Devolve um ponto
-                    print(combate.pontos_disponiveis)
+    # def processar_eventos(self, event, disponiveis, disponiveis_copy): 
+    #     print(combate.pontos_disponiveis)
+    #     if event.type == pygame.MOUSEBUTTONDOWN:  # Garante que só processamos cliques
+    #         for atributo, botoes in self.botoes.items():
+    #             # Verifica se clicou no botão de diminuir e se há pontos disponíveis para realocar
+    #             if botoes["diminuir"]["rect"].collidepoint(event.pos) and disponiveis < disponiveis_copy:
+    #                 self.valores[atributo] -= 1
+    #                 botoes["diminuir"]["pressionado"] = True
+    #                 disponiveis += 1  # Devolve um ponto
+    #                 print(disponiveis)
 
-                # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar
-                if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
-                    self.valores[atributo] += 1
-                    botoes["aumentar"]["pressionado"] = True
-                    combate.pontos_disponiveis -= 1  # Gasta um ponto
-                    print(combate.pontos_disponiveis)
+    #             # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar
+    #             if botoes["aumentar"]["rect"].collidepoint(event.pos) and disponiveis > 0:
+    #                 self.valores[atributo] += 1
+    #                 botoes["aumentar"]["pressionado"] = True
+    #                 disponiveis -= 1  # Gasta um ponto
+    #                 print(disponiveis)
 
     def resetar_botoes(self):
         for botoes in self.botoes.values():

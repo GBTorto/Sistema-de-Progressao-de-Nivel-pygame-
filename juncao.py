@@ -29,7 +29,20 @@ def game_loop():
 
             if combate.show_menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    menu.processar_eventos(event)
+                    for atributo, botoes in menu.botoes.items():
+                        # Verifica se clicou no botão de diminuir e se há pontos disponíveis para realocar
+                        if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
+                            menu.valores[atributo] -= 1
+                            botoes["diminuir"]["pressionado"] = True
+                            combate.pontos_disponiveis += 1  # Devolve um ponto
+                            # print(disponiveis)
+
+                        # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar
+                        if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
+                            menu.valores[atributo] += 1
+                            botoes["aumentar"]["pressionado"] = True
+                            combate.pontos_disponiveis -= 1  # Gasta um ponto
+                            print(combate.pontos_disponiveis)
 
         # Atualiza o jogo se o menu NÃO estiver aberto
         if not combate.show_menu:
