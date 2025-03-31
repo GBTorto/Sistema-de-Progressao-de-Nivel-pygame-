@@ -8,6 +8,8 @@ combate = Combate()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+menu.valores_copy = menu.valores.copy()
+
 # Loop do jogo
 def game_loop():
     running = True
@@ -34,7 +36,15 @@ def game_loop():
                         if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
                             menu.valores[atributo] -= 1
                             botoes["diminuir"]["pressionado"] = True
+                            verificacao = combate.pontos_disponiveis
                             combate.pontos_disponiveis += 1  # Devolve um ponto
+
+                            if menu.valores[atributo] < menu.valores_copy[atributo]:
+                                menu.valores[atributo] = menu.valores_copy[atributo]
+                                combate.pontos_disponiveis = verificacao
+                                
+                                if event.type == pygame.K_KP_ENTER:
+                                    menu.valores_copy = menu.valores.copy()
                             # print(disponiveis)
 
                         # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar

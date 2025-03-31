@@ -7,7 +7,7 @@ pygame.init()
 
 
 # Inicia o combate e o menu
-combate = Combate()
+# combate = Combate()
 # menu = Menu(3, 2, 3, 2, 3)  # Inicializando o menu com valores
 
 class Menu():
@@ -19,6 +19,8 @@ class Menu():
             "stamina": valor_stamina,
             "velocidade": valor_velocidade
         }
+
+        self.valores_copy = 0
 
         self.menu_img = pygame.image.load("Imagem menu/menu.png")
         self.menu_img = pygame.transform.scale(self.menu_img, (400, 600))
@@ -56,7 +58,6 @@ class Menu():
         for atributo, botoes in self.botoes.items():
             texto = self.fonte.render(str(self.valores[atributo]), True, (0, 0, 0))
             tela.blit(texto, botoes["texto_pos"])
-
 
     # def processar_eventos(self, event, disponiveis, disponiveis_copy): 
     #     print(combate.pontos_disponiveis)
