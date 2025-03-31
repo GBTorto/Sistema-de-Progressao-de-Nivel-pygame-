@@ -96,7 +96,7 @@ class Combate():
             self.enemy.y += 1
 
     # Atualiza a barra de XP
-    def atualizar_xp(self):
+    def atualizar_xp(self, tela, x, y):
         if self.enemy_health == 0 and not self.ganhando_xp:
             self.temporizador_xp = pygame.time.get_ticks()
             self.ganhando_xp = True
@@ -116,7 +116,9 @@ class Combate():
 
             self.nivel += 1
             self.pontos_disponiveis += 5
+            print(self.pontos_disponiveis)
             self.pontos_disponiveis_copy = self.pontos_disponiveis
+            print(self.pontos_disponiveis_copy)
             self.xp_excedente = self.xp_limitador - self.xp_max
             self.xp_max *= self.multiplicador_xp
             self.xp = 0
@@ -130,7 +132,7 @@ class Combate():
         if self.temporizador_mensagem is not None:
             font = pygame.font.SysFont(None, 55)
             text = font.render("Você upou de nível", True, self.GREEN)
-            screen.blit(text, (WIDTH // 2 - 120, HEIGHT // 2 - 50))
+            tela.blit(text, (x // 2 - 120, y // 2 - 50))
             if pygame.time.get_ticks() - self.temporizador_mensagem > 1500:
                 self.temporizador_mensagem = None
 
@@ -173,6 +175,6 @@ class Combate():
 #         pygame.quit()
 
 # # Inicia o jogo
-# if __name__ == "__main__":
+# if _name_ == "_main_":
 #     combate = Combate()
 #     combate.game_loop()

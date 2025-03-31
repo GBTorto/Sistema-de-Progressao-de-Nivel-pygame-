@@ -11,7 +11,7 @@ combate = Combate()
 # menu = Menu(3, 2, 3, 2, 3)  # Inicializando o menu com valores
 
 class Menu():
-    def __init__(self, valor_ataque, valor_defesa, valor_vida, valor_stamina, valor_velocidade):      
+    def __init__(self, valor_ataque, valor_defesa, valor_vida, valor_stamina, valor_velocidade):  
         self.valores = {
             "ataque": valor_ataque,
             "defesa": valor_defesa,
@@ -41,6 +41,11 @@ class Menu():
                 "diminuir": {"rect": pygame.Rect(x_menos, y, 32, 32), "sprites": frames_menos, "atual": 0, "pressionado": False},
                 "texto_pos": (x_texto, y)
             }
+        
+    def desenhar_botoes(self, tela):
+        for atributo, botoes in self.botoes.items():
+            tela.blit(botoes["diminuir"]["sprites"][botoes["diminuir"]["atual"]], botoes["diminuir"]["rect"].topleft)
+            tela.blit(botoes["aumentar"]["sprites"][botoes["aumentar"]["atual"]], botoes["aumentar"]["rect"].topleft)
 
     def atualizar_sprites(self):
         for botoes in self.botoes.values():
@@ -52,27 +57,37 @@ class Menu():
             texto = self.fonte.render(str(self.valores[atributo]), True, (0, 0, 0))
             tela.blit(texto, botoes["texto_pos"])
 
-    def processar_eventos(self, event):
-        for atributo, botoes in self.botoes.items():
-            if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
-                self.valores[atributo] = max(0, self.valores[atributo] - 1)
-                botoes["diminuir"]["pressionado"] = True
-                combate.pontos_disponiveis += 1
 
-            if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
-                self.valores[atributo] += 1
-                botoes["aumentar"]["pressionado"] = True
-                combate.pontos_disponiveis -= 1
+    def processar_eventos(self, event): 
+        print(combate.pontos_disponiveis)
+        if event.type == pygame.MOUSEBUTTONDOWN:  # Garante que só processamos cliques
+            for atributo, botoes in self.botoes.items():
+                # Verifica se clicou no botão de diminuir e se há pontos disponíveis para realocar
+                if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
+                    self.valores[atributo] -= 1
+                    botoes["diminuir"]["pressionado"] = True
+                    combate.pontos_disponiveis += 1  # Devolve um ponto
+                    print(combate.pontos_disponiveis)
+
+                # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar
+                if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
+                    self.valores[atributo] += 1
+                    botoes["aumentar"]["pressionado"] = True
+                    combate.pontos_disponiveis -= 1  # Gasta um ponto
+                    print(combate.pontos_disponiveis)
 
     def resetar_botoes(self):
         for botoes in self.botoes.values():
             botoes["aumentar"]["pressionado"] = False
             botoes["diminuir"]["pressionado"] = False
+        self.atualizar_sprites()  # Garante que os sprites são atualizados
+
 
 # Inicialização do Pygame
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Sistema de Combate Simples")
 
+print(Menu(5, 5, 5, 5, 5))
 # # Inicia o loop do jogo
 # if __name__ == "__main__":
 #     combate.game_loop()

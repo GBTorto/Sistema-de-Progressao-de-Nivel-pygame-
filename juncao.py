@@ -13,7 +13,7 @@ def game_loop():
     running = True
     while running:
         combate.movimentacao()
-        combate.atualizar_xp()
+        combate.atualizar_xp(screen, WIDTH, HEIGHT)
         combate.render()
 
         for event in pygame.event.get():
@@ -30,15 +30,20 @@ def game_loop():
             if combate.show_menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     menu.processar_eventos(event)
+
         # Atualiza o jogo se o menu NÃO estiver aberto
         if not combate.show_menu:
             combate.movimentacao()
-            combate.atualizar_xp()
             combate.render()
+            combate.atualizar_xp(screen, WIDTH, HEIGHT)
+            
         else:
-            # Exibe o menu na tela
+            # Exibe o menu na tela 
             screen.blit(menu.menu_img, (200, 50))  # Posição do menu
             menu.desenhar_valores(screen)
+            menu.atualizar_sprites()
+            menu.desenhar_botoes(screen)
+            menu.resetar_botoes()
 
 
         pygame.display.flip()
