@@ -35,18 +35,23 @@ class Combate():
         self.xp_max = 100
         self.nivel = 1
         self.nivel_anterior = self.nivel
+        self.tamanho_nivel = 40
         self.dano = 15
         self.multiplicador_xp = 1.1
-        self.temporizador_mensagem = None
+        self.temporizador_mensagem = None 
 
         # Variáveis xp
         self.xp_width = 200
-        self.xp_height = 20
-        self.pos_xp_x = (WIDTH // 2) - (self.xp_width // 2)
-        self.pos_xp_y = HEIGHT - (self.xp_height * 2)
+        self.xp_height = 10
         self.xp_ratio = 0
         self.temporizador_xp = None
         self.ganhando_xp = False
+
+        # Posição desenho do nivel
+        self.pos_xp_x = (WIDTH // 2) - (self.xp_width // 2)
+        self.pos_xp_y = HEIGHT - (self.xp_height * 2)
+        self.pos_nivel_x = (WIDTH // 2) - (self.nivel)
+        self.pos_nivel_y = self.pos_xp_y - (self.tamanho_nivel - 10)
 
         # Distribuição de pontos
         self.pontos_disponiveis = 0
@@ -137,7 +142,7 @@ class Combate():
                 self.temporizador_mensagem = None
 
     # Exibe a tela com os componentes
-    def render(self):
+    def render(self, tela):
         screen.fill(self.BLUE)  # Cor de fundo
 
         # Desenha o jogador (quadrado branco)
@@ -150,8 +155,13 @@ class Combate():
         self.draw_health_bar(self.enemy.x, self.enemy.y - 30, self.enemy_health, self.max_health)
 
         # Desenha a barra de xp
-        pygame.draw.rect(screen, self.WHITE, (self.pos_xp_x, self.pos_xp_y, self.xp_width, self.xp_height))
-        pygame.draw.rect(screen, self.GREEN, (self.pos_xp_x, self.pos_xp_y, self.xp_ratio, self.xp_height))
+        pygame.draw.rect(screen, self.WHITE, (self.pos_xp_x, self.pos_xp_y, self.xp_width, self.xp_height), 0, 10)
+        pygame.draw.rect(screen, self.GREEN, (self.pos_xp_x, self.pos_xp_y, self.xp_ratio, self.xp_height), 0, 10)
+
+        # Desenha o nivel
+        self.font_nivel = pygame.font.SysFont(None, self.tamanho_nivel)
+        self.text_nivel = self.font_nivel.render(f"{self.nivel}", True, self.GREEN)
+        tela.blit(self.text_nivel, (self.pos_nivel_x, self.pos_nivel_y))
 
 #     # Loop do jogo
 #     def game_loop(self):

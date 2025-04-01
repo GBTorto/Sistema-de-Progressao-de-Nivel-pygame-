@@ -2,7 +2,10 @@ import pygame
 from teste_design import Menu
 from upar_nivel import Combate
 
-menu = Menu(5, 5, 5, 5, 5)
+tamanho_menu_img_x = 0
+tamanho_menu_img_y = 0
+
+menu = Menu(5, 5, 5, 5, 5, 1, 1, 1, 1, 1)
 combate = Combate()
 
 WIDTH, HEIGHT = 800, 600
@@ -14,7 +17,9 @@ def game_loop():
     while running:
         combate.movimentacao()
         combate.atualizar_xp(screen, WIDTH, HEIGHT)
-        combate.render()
+        combate.render(screen)
+        if combate.show_menu == False:
+            screen.blit(menu.menu_img, ((combate.player.x, combate.player.y)))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -30,6 +35,11 @@ def game_loop():
                         menu.valores_copy = menu.valores.copy()  # Salva os valores antes de editar
 
             if combate.show_menu:
+                # if menu.tamanho_menu_img_x < 600 and menu.tamanho_menu_img_y < 400:
+                #     menu.tamanho_menu_img_x += 10  # Ajuste a velocidade do zoom
+                #     menu.tamanho_menu_img_y += 5
+                #     menu.menu_img = pygame.transform.scale(menu.menu_img_original, (menu.tamanho_menu_img_x, menu.tamanho_menu_img_y))
+                # else:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for atributo, botoes in menu.botoes.items():
                         # Botão de diminuir
@@ -39,11 +49,37 @@ def game_loop():
                                 botoes["diminuir"]["pressionado"] = True
                                 combate.pontos_disponiveis += 1  # Devolve um ponto
 
+                                if atributo == "ataque":
+                                    menu.atributos[atributo] -= 1.25
+                                if atributo == "defesa":
+                                    menu.atributos[atributo] -= 1
+                                if atributo == "vida":
+                                    menu.atributos[atributo] -= 0.5
+                                if atributo == "stamina":
+                                    menu.atributos[atributo] -= 1.25
+                                if atributo == "velocidade":
+                                    menu.atributos[atributo] -= 2
+
+                                print(menu.atributos[atributo])
+
                         # Botão de aumentar
                         if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
                             menu.valores[atributo] += 1
                             botoes["aumentar"]["pressionado"] = True
                             combate.pontos_disponiveis -= 1  # Gasta um ponto
+
+                            if atributo == "ataque":
+                                menu.atributos[atributo] += 1.25
+                            if atributo == "defesa":
+                                menu.atributos[atributo] += 1
+                            if atributo == "vida":
+                                menu.atributos[atributo] += 0.5
+                            if atributo == "stamina":
+                                menu.atributos[atributo] += 1.25
+                            if atributo == "velocidade":
+                                menu.atributos[atributo] += 2
+                            
+                            print(menu.atributos[atributo])
 
                     # Confirma os valores ao pressionar ENTER
                     if event.type == pygame.K_KP_ENTER:
@@ -52,12 +88,12 @@ def game_loop():
         # Atualiza o jogo se o menu NÃO estiver aberto
         if not combate.show_menu:
             combate.movimentacao()
-            combate.render()
+            combate.render(screen)
             combate.atualizar_xp(screen, WIDTH, HEIGHT)
         else:
             # Exibe o menu na tela 
-            screen.blit(menu.menu_img, (200, 50))  # Posição do menu
-            menu.desenhar_valores(screen)
+            screen.blit(menu.menu_img, ((WIDTH // 2) - 300, (HEIGHT // 2) - 200))  # Posição do menu
+            menu.desenhar_valores(screen, combate.font_nivel, combate.text_nivel, combate.nivel, combate.pontos_disponiveis)
             menu.atualizar_sprites()
             menu.desenhar_botoes(screen)
             menu.resetar_botoes()
