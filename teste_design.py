@@ -86,59 +86,8 @@ class Menu():
             tela.blit(texto, botoes["texto_pos"])
 
         for i, key in enumerate(self.atributos.keys()):
-            # font_atributo = pygame.font.SysFont(None, self.tamanho_fonte)
-            text_atributo = self.fonte.render(str(self.atributos[atributo]), True, (0,0,0))
+            text_atributo = self.fonte.render(str(self.atributos[key]), True, (0,0,0))
             tela.blit(text_atributo, (600, 224 + i * 30))
-
-    # def diminuir_status(self):
-    #     for atributo, botoes in botoes.items():
-    #         if self.atributos[atributo] == "ataque":
-    #             self.atributos[atributo] -= 1.25
-    #         if self.atributos[atributo] == "defesa":
-    #             self.atributos[atributo] -= 1
-    #         if self.atributos[atributo] == "vida":
-    #             self.atributos[atributo] -= 0.5
-    #         if self.atributos[atributo] == "stamina":
-    #             self.atributos[atributo] -= 1.25
-    #         if self.atributos[atributo] == "velocidade":
-    #             self.atributos[atributo] -= 2
-
-    # def aumentar_status(self):
-    #     for atributo, botoes in botoes.items():
-    #         if self.atributos[atributo] == "ataque":
-    #             self.atributos[atributo] += 1.25
-    #         if self.atributos[atributo] == "defesa":
-    #             self.atributos[atributo] += 1
-    #         if self.atributos[atributo] == "vida":
-    #             self.atributos[atributo] += 0.5
-    #         if self.atributos[atributo] == "stamina":
-    #             self.atributos[atributo] += 1.25
-    #         if self.atributos[atributo] == "velocidade":
-    #             self.atributos[atributo] += 2
-
-            # Botão de aumentar
-            # if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
-            #     valores[atributo] += 1
-            #     botoes["aumentar"]["pressionado"] = True
-            #     combate.pontos_disponiveis -= 1  # Gasta um ponto
-
-    # def processar_eventos(self, event, disponiveis, disponiveis_copy): 
-    #     print(combate.pontos_disponiveis)
-    #     if event.type == pygame.MOUSEBUTTONDOWN:  # Garante que só processamos cliques
-    #         for atributo, botoes in self.botoes.items():
-    #             # Verifica se clicou no botão de diminuir e se há pontos disponíveis para realocar
-    #             if botoes["diminuir"]["rect"].collidepoint(event.pos) and disponiveis < disponiveis_copy:
-    #                 self.valores[atributo] -= 1
-    #                 botoes["diminuir"]["pressionado"] = True
-    #                 disponiveis += 1  # Devolve um ponto
-    #                 print(disponiveis)
-
-    #             # Verifica se clicou no botão de aumentar e se há pontos disponíveis para gastar
-    #             if botoes["aumentar"]["rect"].collidepoint(event.pos) and disponiveis > 0:
-    #                 self.valores[atributo] += 1
-    #                 botoes["aumentar"]["pressionado"] = True
-    #                 disponiveis -= 1  # Gasta um ponto
-    #                 print(disponiveis)
 
     def resetar_botoes(self):
         for botoes in self.botoes.values():
