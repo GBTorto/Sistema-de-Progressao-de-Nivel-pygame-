@@ -132,7 +132,6 @@ class Combate():
 
         if self.nivel_anterior < self.nivel:
             self.nivel_anterior = self.nivel
-            self.dano += 10
 
         if self.temporizador_mensagem is not None:
             font = pygame.font.SysFont(None, 55)

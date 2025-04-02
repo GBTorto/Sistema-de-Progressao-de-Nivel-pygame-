@@ -18,8 +18,6 @@ def game_loop():
         combate.movimentacao()
         combate.atualizar_xp(screen, WIDTH, HEIGHT)
         combate.render(screen)
-        if combate.show_menu == False:
-            screen.blit(menu.menu_img, ((combate.player.x, combate.player.y)))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -34,33 +32,25 @@ def game_loop():
                     if combate.show_menu:
                         menu.valores_copy = menu.valores.copy()  # Salva os valores antes de editar
 
-            if combate.show_menu:
-                # if menu.tamanho_menu_img_x < 600 and menu.tamanho_menu_img_y < 400:
-                #     menu.tamanho_menu_img_x += 10  # Ajuste a velocidade do zoom
-                #     menu.tamanho_menu_img_y += 5
-                #     menu.menu_img = pygame.transform.scale(menu.menu_img_original, (menu.tamanho_menu_img_x, menu.tamanho_menu_img_y))
-                # else:
+            if combate.show_menu and menu.tamanho_menu_img_x == 600 and menu.tamanho_menu_img_y == 400:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for atributo, botoes in menu.botoes.items():
                         # Botão de diminuir
                         if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
-                            if menu.valores[atributo] > menu.valores_copy[atributo]:  # Impede de reduzir abaixo do inicial
-                                menu.valores[atributo] -= 1
-                                botoes["diminuir"]["pressionado"] = True
-                                combate.pontos_disponiveis += 1  # Devolve um ponto
-
-                                if atributo == "ataque":
+                            if atributo == "ataque":
                                     menu.atributos[atributo] -= 1.25
-                                if atributo == "defesa":
-                                    menu.atributos[atributo] -= 1
-                                if atributo == "vida":
-                                    menu.atributos[atributo] -= 0.5
-                                if atributo == "stamina":
-                                    menu.atributos[atributo] -= 1.25
-                                if atributo == "velocidade":
-                                    menu.atributos[atributo] -= 2
+                                    combate.dano -= 10
+                            if atributo == "defesa":
+                                menu.atributos[atributo] -= 1
+                            if atributo == "vida":
+                                menu.atributos[atributo] -= 0.5
+                            if atributo == "stamina":
+                                menu.atributos[atributo] -= 1.25
+                            if atributo == "velocidade":
+                                menu.atributos[atributo] -= 2
+                                combate.player_speed -= 1
 
-                                print(menu.atributos[atributo])
+                            print(menu.atributos[atributo])
 
                         # Botão de aumentar
                         if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
@@ -70,6 +60,7 @@ def game_loop():
 
                             if atributo == "ataque":
                                 menu.atributos[atributo] += 1.25
+                                combate.dano += 10
                             if atributo == "defesa":
                                 menu.atributos[atributo] += 1
                             if atributo == "vida":
@@ -78,6 +69,7 @@ def game_loop():
                                 menu.atributos[atributo] += 1.25
                             if atributo == "velocidade":
                                 menu.atributos[atributo] += 2
+                                combate.player_speed += 1
                             
                             print(menu.atributos[atributo])
 
@@ -85,6 +77,19 @@ def game_loop():
                     if event.type == pygame.K_KP_ENTER:
                         menu.valores_copy = menu.valores.copy()
 
+        if combate.show_menu and menu.tamanho_menu_img_x < 600 and menu.tamanho_menu_img_y < 400:
+            menu.tamanho_menu_img_x += 30  # Ajuste a velocidade do zoom
+            menu.tamanho_menu_img_y += 20
+            menu.menu_img = pygame.transform.scale(menu.menu_img_original, (menu.tamanho_menu_img_x, menu.tamanho_menu_img_y))
+        elif not combate.show_menu and menu.tamanho_menu_img_x > 0 and menu.tamanho_menu_img_y > 0:
+            menu.tamanho_menu_img_x = max(0, menu.tamanho_menu_img_x - 30)
+            menu.tamanho_menu_img_y = max(0, menu.tamanho_menu_img_y - 20)
+
+            if menu.tamanho_menu_img_x > 0 and menu.tamanho_menu_img_y > 0:
+                menu.menu_img = pygame.transform.scale(menu.menu_img_original, (menu.tamanho_menu_img_x, menu.tamanho_menu_img_y))
+
+
+                
         # Atualiza o jogo se o menu NÃO estiver aberto
         if not combate.show_menu:
             combate.movimentacao()
@@ -92,11 +97,13 @@ def game_loop():
             combate.atualizar_xp(screen, WIDTH, HEIGHT)
         else:
             # Exibe o menu na tela 
-            screen.blit(menu.menu_img, ((WIDTH // 2) - 300, (HEIGHT // 2) - 200))  # Posição do menu
-            menu.desenhar_valores(screen, combate.font_nivel, combate.text_nivel, combate.nivel, combate.pontos_disponiveis)
-            menu.atualizar_sprites()
-            menu.desenhar_botoes(screen)
-            menu.resetar_botoes()
+            screen.blit(menu.menu_img,((WIDTH // 2) - (menu.tamanho_menu_img_x // 2),(HEIGHT // 2) - (menu.tamanho_menu_img_y // 2)))
+            if menu.tamanho_menu_img_x > 500 and menu.tamanho_menu_img_y > 333:
+                # Posição do menu
+                menu.desenhar_valores(screen, combate.font_nivel, combate.text_nivel, combate.nivel, combate.pontos_disponiveis)
+                menu.atualizar_sprites()
+                menu.desenhar_botoes(screen)
+                menu.resetar_botoes()   
 
         pygame.display.flip()
         combate.clock.tick(60)

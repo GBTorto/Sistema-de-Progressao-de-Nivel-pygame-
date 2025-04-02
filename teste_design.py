@@ -30,8 +30,8 @@ class Menu():
 
         self.valores_copy = 0
 
-        self.tamanho_menu_img_x = 600
-        self.tamanho_menu_img_y = 400
+        self.tamanho_menu_img_x = 0
+        self.tamanho_menu_img_y = 0
 
         self.menu_img_original = pygame.image.load("Imagem menu/menu.png")
         self.menu_img = pygame.transform.scale(self.menu_img_original, (self.tamanho_menu_img_x, self.tamanho_menu_img_y))
