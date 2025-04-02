@@ -37,20 +37,25 @@ def game_loop():
                     for atributo, botoes in menu.botoes.items():
                         # Botão de diminuir
                         if botoes["diminuir"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis < combate.pontos_disponiveis_copy:
-                            if atributo == "ataque":
+                            if menu.valores[atributo] > menu.valores_copy[atributo]:  # Impede de reduzir abaixo do inicial
+                                menu.valores[atributo] -= 1
+                                botoes["diminuir"]["pressionado"] = True
+                                combate.pontos_disponiveis += 1  # Devolve um ponto
+
+                                if atributo == "ataque":
                                     menu.atributos[atributo] -= 1.25
                                     combate.dano -= 10
-                            if atributo == "defesa":
-                                menu.atributos[atributo] -= 1
-                            if atributo == "vida":
-                                menu.atributos[atributo] -= 0.5
-                            if atributo == "stamina":
-                                menu.atributos[atributo] -= 1.25
-                            if atributo == "velocidade":
-                                menu.atributos[atributo] -= 2
-                                combate.player_speed -= 1
+                                if atributo == "defesa":
+                                    menu.atributos[atributo] -= 1
+                                if atributo == "vida":
+                                    menu.atributos[atributo] -= 0.5
+                                if atributo == "stamina":
+                                    menu.atributos[atributo] -= 1.25
+                                if atributo == "velocidade":
+                                    menu.atributos[atributo] -= 2
+                                    combate.player_speed -= 1
 
-                            print(menu.atributos[atributo])
+                                print(menu.atributos[atributo])
 
                         # Botão de aumentar
                         if botoes["aumentar"]["rect"].collidepoint(event.pos) and combate.pontos_disponiveis > 0:
