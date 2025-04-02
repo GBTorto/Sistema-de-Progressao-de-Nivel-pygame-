@@ -5,7 +5,7 @@ from xp import Combate
 tamanho_menu_img_x = 0
 tamanho_menu_img_y = 0
 
-menu = Menu(5, 5, 5, 5, 5, 1.0, 1.0, 1.0, 1.0, 1.0)
+menu = Menu(5, 5, 5, 5, 5, 6.25, 5.0, 2.5, 6.25, 10.0)
 combate = Combate()
 
 WIDTH, HEIGHT = 800, 600
