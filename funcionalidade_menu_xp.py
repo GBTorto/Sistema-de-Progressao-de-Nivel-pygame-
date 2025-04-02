@@ -1,6 +1,6 @@
 import pygame
-from teste_design import Menu
-from upar_nivel import Combate
+from menu_status import Menu
+from xp import Combate
 
 tamanho_menu_img_x = 0
 tamanho_menu_img_y = 0

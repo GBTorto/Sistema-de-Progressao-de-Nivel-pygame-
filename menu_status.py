@@ -1,7 +1,7 @@
 import pygame
 import plotly.express as px
 import pandas as pd
-from upar_nivel import Combate
+from xp import Combate
 
 pygame.init()
 
